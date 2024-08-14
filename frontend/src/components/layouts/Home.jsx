@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CountRestaurants from "./CountRestaurants";
 import Restaurant from './Restaurant';
+import { getRestaurants } from '../../actions/restaurantAction';
+import { useDispatch } from 'react-redux';
 
 export default function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getRestaurants())
+  }, [dispatch]);
+
   return (
     <>
         <CountRestaurants />

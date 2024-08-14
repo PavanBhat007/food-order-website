@@ -11,7 +11,7 @@ export default function App() {
     <div className="App">
       <Header />
       <div className="container container-fluid">
-        {/* <Home /> */}
+        <Home />
         <Menu />
       </div>
       <Footer />

@@ -1,7 +1,7 @@
 {
   "name": "orderit",
   "version": "1.0.0",
-  "description": "Food Ordering Website using MERN Stack.This website is created for particular restaurant i.e Zyka.",
+  "description": "Food Ordering Website using MERN Stack.This website is created in the MERN Internship",
   "main": "server.js",
   "scripts": {
     "start": "nodemon backend/server.js",
