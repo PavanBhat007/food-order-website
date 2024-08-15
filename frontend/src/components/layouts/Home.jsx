@@ -3,7 +3,7 @@ import CountRestaurants from "./CountRestaurants";
 import Restaurant from './Restaurant';
 import Loader from './Loader';
 import Message from './Message';
-import { getRestaurants } from '../../actions/restaurantAction';
+import { getRestaurants, sortByReviews, sortByRatings, toggleVegOnly } from '../../actions/restaurantAction';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
@@ -14,12 +14,27 @@ export default function Home() {
   const {
     loading: restaurantLoading, 
     error: restaurantError, 
-    restaurants
+    restaurants,
+    showVegOnly,
   } = useSelector((state) => state.restaurants); 
 
   useEffect(() => {
     dispatch(getRestaurants())
   }, [dispatch]);
+
+
+  const handleSortByReviews = () => {
+    dispatch(sortByReviews());
+  }
+
+  const handleSortByRatings = () => {
+    dispatch(sortByRatings());
+  }
+
+  const handleToggleVegOnly = () => {
+    dispatch(toggleVegOnly());
+  }
+
 
   return (
     <>
@@ -31,14 +46,18 @@ export default function Home() {
             <>
               <section>
                 <div className="sort">
-                    <button className="sort_veg p-3">Pure Veg</button>
-                    <button className="sort_rev p-3">Sort by Reviews</button>
-                    <button className="sort_rate p-3">Sort by Ratings</button>
+                    <button className="sort_veg p-3" onClick={handleToggleVegOnly}>
+                      { showVegOnly ? "Show All" : "Pure Veg" }
+                    </button>
+                    <button className="sort_rev p-3" onClick={handleSortByReviews}>Sort by Reviews</button>
+                    <button className="sort_rate p-3" onClick={handleSortByRatings}>Sort by Ratings</button>
                 </div>
                 <div className="row mt-4">
-                    { restaurants ? restaurants.map((restaurant) => (
-                      <Restaurant key={restaurant._id} restaurant={restaurant} />
-                    )) : null}
+                    { restaurants ? (restaurants.map((restaurant) => 
+                        (!showVegOnly || (showVegOnly && restaurant.isVeg)) ? (
+                          <Restaurant key={restaurant._id} restaurant={restaurant} />
+                        ) : null 
+                      )) : (<Message variant="info">No Restaurant found </Message>)}
                 </div>
               </section>
             </>

@@ -1,7 +1,12 @@
 import axios from "axios";
 import {
+  ALL_RESTAURANTS_FAIL,
   ALL_RESTAURANTS_REQUEST,
   ALL_RESTAURANTS_SUCCESS,
+  CLEAR_ERROR,
+  SORT_BY_RATINGS,
+  SORT_BY_REVIEWS,
+  TOGGLE_VEG_ONLY,
 } from "../constants/restaurantConstant";
 
 export const getRestaurants = () => {
@@ -12,19 +17,28 @@ export const getRestaurants = () => {
       const { data } = await axios.get(storeAPI);
 
       /* 
-                data = {
-                    "status": "success",
-                    "count": 8,
-                    "restaurants": [ ... ]
-                } 
-            */
+        data = {
+          "status": "success",
+          "count": 8,
+          "restaurants": [ ... ]
+        } 
+      */
       const { restaurants, count } = data;
       dispatch({
         type: ALL_RESTAURANTS_SUCCESS,
         payload: { restaurants, count }, // data to be stored in "STORE"
       });
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      dispatch({
+        type: ALL_RESTAURANTS_FAIL,
+        payload: err.response.data.message 
+      })
     }
   };
 };
+
+export const sortByRatings = () => { return { type: SORT_BY_RATINGS }; }
+export const sortByReviews = () => { return { type: SORT_BY_REVIEWS }; }
+export const toggleVegOnly = () => { return { type: TOGGLE_VEG_ONLY }; }
+
+export const clearErrors = () => { return { type: CLEAR_ERROR }; }

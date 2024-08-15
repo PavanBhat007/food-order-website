@@ -5,7 +5,7 @@ import { getRestaurants } from '../../actions/restaurantAction';
 export default function CountRestaurants() {
 
   const dispatch = useDispatch();
-  const { loading: countLoading, error: countError, count } = useSelector((state) => state.restaurants);
+  const { loading: countLoading, error: countError, count, showVegOnly, pureVegRestaurantsCount } = useSelector((state) => state.restaurants);
 
   useEffect(() => {
     dispatch(getRestaurants);
@@ -20,7 +20,9 @@ export default function CountRestaurants() {
             <p>error: {countError}</p>
           ) : (
             <p className="NumOfRestro">
-              {count} <span className="Restro">Restaurants</span>
+              {showVegOnly ? pureVegRestaurantsCount : count} <span className="Restro">
+                Restaurant{showVegOnly ? (pureVegRestaurantsCount > 1 ? "s": null) : (count > 1 ? "s" : null)}
+              </span>
             </p>
           )
         )
