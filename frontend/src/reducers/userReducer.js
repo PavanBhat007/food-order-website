@@ -14,7 +14,7 @@ import {
 } from "../constants/userConstant";
 
 const initialState = {
-  users: null,
+  user: null,
   loading: false,
   isAuthenticated: false,
   data: {},
