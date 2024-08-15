@@ -10,9 +10,11 @@ import {
 import thunk from "redux-thunk"; // helps with data fetching
 
 import { restaurantReducer } from "./reducers/restaurantReducer";
+import { menuReducer } from "./reducers/menuReducer";
 
 const reducer = combineReducers({
   restaurants: restaurantReducer,
+  menus: menuReducer,
 });
 
 // to use redux devtools browser extension
