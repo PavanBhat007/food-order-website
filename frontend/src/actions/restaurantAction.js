@@ -31,7 +31,7 @@ export const getRestaurants = () => {
     } catch (err) {
       dispatch({
         type: ALL_RESTAURANTS_FAIL,
-        payload: err.response.data.message 
+        payload: err.message
       })
     }
   };
