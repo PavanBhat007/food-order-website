@@ -8,7 +8,7 @@ const Register = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, loading, error } = useSelector(state => state.auth);
+  const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
   const [user, setUser] = useState({
     name: "",
@@ -18,7 +18,7 @@ const Register = () => {
     phoneNumber: ""
   });
   const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("images/images.png");
+  const [avatarPreview, setAvatarPreview] = useState("/images/images.png");
   
   const { name, email, password, passwordConfirm, phoneNumber } = user;
 
@@ -44,7 +44,7 @@ const Register = () => {
     formData.set("password", password);
     formData.set("passwordConfirm", passwordConfirm);
     formData.set("phoneNumber", phoneNumber);
-    formData.set("avatar", (avatar==="" ? "images/images.png" : avatar));
+    formData.set("avatar", (avatar==="" ? "/images/images.png" : avatar));
 
     dispatch(register(formData));
   }

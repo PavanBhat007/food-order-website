@@ -1,16 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAlert } from "react-alert";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
 import Loader from "../layouts/Loader";
+import { clearErrors, login } from "../../actions/userAction";
 
 const Login = () => {
+  const alert = useAlert();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const {isAuthenticated, loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if(isAuthenticated) navigate("/")
+    if(error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+  }, [dispatch, isAuthenticated, alert, navigate, error]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login(email, password));
+  }
+
   return (
     <>
-      {5 > 10 ? (
+      {loading ? (
         <Loader />
       ) : (
         <>
           <div className="row wrapper">
             <div className="col-10 col-lg-5">
-              <form className="shadow-lg">
+              <form className="shadow-lg" onSubmit={handleSubmit}>
                 <h1 className="mb-3">Login</h1>
                 <div className="form-group">
                   <label htmlFor="email_field">Email</label>
@@ -18,7 +44,8 @@ const Login = () => {
                     type="email"
                     id="email_field"
                     className="form-control"
-                    value={"abc.email.com"}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   ></input>
                 </div>
                 <div className="form-group ">
@@ -29,10 +56,11 @@ const Login = () => {
                     type="password"
                     id="password_field"
                     className="form-control"
-                    value={"12345678"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   ></input>
                 </div>
-                <a className="float-right mb-4">Forgot Password</a>
+                <Link to="/users/forgotPassword" className="float-right mb-4">Forgot Password</Link>
                 <button
                   id="login_button"
                   type="submit"
@@ -40,7 +68,7 @@ const Login = () => {
                 >
                   LOGIN
                 </button>
-                <a className="float-right mt-3">NEW USER?</a>
+                <Link to="/users/signup" className="float-right mt-3">NEW USER?</Link>
               </form>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import "./App.css";
 
@@ -8,8 +8,17 @@ import Footer from "./components/layouts/Footer";
 import Menu from "./components/layouts/Menu";
 import Login from "./components/users/Login";
 import Register from "./components/users/Register";
+import Profile from "./components/users/Profile";
+import UpdateProfile from "./components/users/UpdateProfile";
+
+import store from './store';
+import { loadUser } from "./actions/userAction";
 
 export default function App() {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -20,6 +29,8 @@ export default function App() {
             <Route path="/eats/stores/:restaurantId/menus" element={<Menu />} />
             <Route path="/users/login" element={<Login />} />
             <Route path="/users/signup" element={<Register />} />
+            <Route path="/users/me" element={<Profile />} />
+            <Route path="/users/me/update" element={<UpdateProfile />} />
           </Routes>
         </div>
         <Footer />

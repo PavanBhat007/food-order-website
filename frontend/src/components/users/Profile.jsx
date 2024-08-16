@@ -1,10 +1,14 @@
 import React from "react";
 import Loader from "../layouts/Loader";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
+  const { user, loading } = useSelector((state) => state.auth);
+
   return (
     <>
-      {5 > 10 ? (
+      {loading && user ? (
         <Loader />
       ) : (
         <>
@@ -14,23 +18,23 @@ const Profile = () => {
                 <figure className="avatar avatar-profile text-center mr-3">
                   <img
                     className="rounded-circle figure-img img-fluid"
-                    src=""
-                    alt="WSA Developer"
+                    src={user?.avatar.url}
+                    alt={user?.name}
                   />
                 </figure>
                 <span>Welcome WSA Developer!</span>
               </div>
-              <a id="edit_profile" className="btn btn-primary btn-block my-5">
+              <Link to="/users/updateProfile" id="edit_profile" className="btn btn-primary btn-block my-5">
                 Edit Profile
-              </a>
+              </Link>
               <h4>Full Name:</h4>
-              <p>WSA Developer</p>
+              <p>{user?.name}</p>
 
               <h4>Email Address</h4>
-              <p>abc@email.com</p>
+              <p>{user?.email}</p>
 
               <h4>Joined On</h4>
-              <p>2024-07-06</p>
+              <p>{(user?.createdAt).substring(0, 10)}</p>
             </div>
           </div>
         </>

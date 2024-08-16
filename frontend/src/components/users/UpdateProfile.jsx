@@ -1,11 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAlert } from 'react-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { clearErrors, loadUser, updateProfile } from '../../actions/userAction';
+import { UPDATE_PROFILE_RESET } from "../../constants/userConstant";
 
 const UpdateProfile = () => {
+  const alert = useAlert();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("/images/images.png");
+
+  const { user } = useSelector((state) => state.auth);
+  const { isUpdated, error, loading } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if(user) {
+      setName(user.name);
+      setEmail(user.email);
+      setAvatar(user.avatar.url);
+    }
+
+    if(error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+
+    if(isUpdated) {
+      alert.success("Updated successfully");
+      dispatch(loadUser());
+      dispatch({ type: UPDATE_PROFILE_RESET });
+      navigate("/users/me");
+    }
+  }, [dispatch, alert, error, navigate, user, isUpdated]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("name", name);
+    formData.set("avatar", avatar);
+
+    dispatch(updateProfile(formData));
+  }
+  
+  const changeAvatar = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if(reader.readyState === 2) {
+        setAvatarPreview(reader.result);
+        setAvatar(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
   return (
     <>
       <div className="row wrapper">
         <div className="col-10 col-lg-5 updateprofile">
-          <form className="shadow-lg" encType="multipart/form-data">
+          <form className="shadow-lg" encType="multipart/form-data" onSubmit={handleSubmit}>
             <h1 className="mt-2 mb-5">Update Profile</h1>
             <div className="form-group">
               <label htmlFor="name_field">Name</label>
@@ -14,7 +75,8 @@ const UpdateProfile = () => {
                 id="name_field"
                 className="form-control"
                 name="name"
-                value="WSA Developer"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               ></input>
             </div>
             <div className="form-group">
@@ -24,7 +86,8 @@ const UpdateProfile = () => {
                 id="email_field"
                 className="form-control"
                 name="email"
-                value="abc@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               ></input>
             </div>
 
@@ -34,7 +97,7 @@ const UpdateProfile = () => {
                 <div>
                   <figure className="avatar mr-3 item-rtl">
                     <img
-                      src=""
+                      src={avatarPreview}
                       className="rounded-circle"
                       alt="Avatar Preview"
                     />
@@ -47,6 +110,7 @@ const UpdateProfile = () => {
                     className="custom-file-input"
                     id="customFile"
                     accept="images/*"
+                    onChange={changeAvatar}
                   ></input>
                   <label className="custom-file-label" htmlFor="customFile">
                     Choose Avatar

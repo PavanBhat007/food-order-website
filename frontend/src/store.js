@@ -11,12 +11,13 @@ import thunk from "redux-thunk"; // helps with data fetching
 
 import { restaurantReducer } from "./reducers/restaurantReducer";
 import { menuReducer } from "./reducers/menuReducer";
-import { authReducer } from "./reducers/userReducer";
+import { authReducer, userReducer } from "./reducers/userReducer";
 
 const reducer = combineReducers({
   restaurants: restaurantReducer,
   menus: menuReducer,
   auth: authReducer,
+  user: userReducer,
 });
 
 // to use redux devtools browser extension
