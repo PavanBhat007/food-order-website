@@ -25,7 +25,7 @@ export const login = (email, password) => {
         headers: { "Content-Type": "application/json" },
       };
 
-      const { data } = axios.post(
+      const { data } = await axios.post(
         "/api/v1/users/login",
         { email, password },
         config
@@ -46,7 +46,7 @@ export const register = (userData) => {
         headers: { "Content-Type": "multipart/form-data" },
       };
 
-      const { data } = axios.post("/api/v1/users/signup", userData, config);
+      const { data } = await axios.post("/api/v1/users/signup", userData, config);
       dispatch({ type: REGISTER_USER_SUCCESS, payload: data.data.user });
 
       // returning immediately because caller needs data immediately
@@ -61,7 +61,7 @@ export const loadUser = () => {
   return async function (dispatch) {
     try {
       dispatch({ type: LOAD_USER_REQUEST });
-      const { data } = axios.get("/api/v1/users/me");
+      const { data } = await axios.get("/api/v1/users/me");
       dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
     } catch (error) {
       dispatch({ type: LOAD_USER_FAIL, payload: "Could not load user" });
