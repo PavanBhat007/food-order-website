@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 
-export default function Restaurant({ key, restaurant }) {
+export default function Restaurant({ restaurant }) {
   return (
     <div className="col-sm-12 col-md-6 col-lg-3 my-3">
         <div className="card p-3 rounded">
