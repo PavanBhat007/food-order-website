@@ -22,9 +22,9 @@ const Profile = () => {
                     alt={user?.name}
                   />
                 </figure>
-                <span>Welcome WSA Developer!</span>
+                <span>Welcome {user.name}!</span>
               </div>
-              <Link to="/users/updateProfile" id="edit_profile" className="btn btn-primary btn-block my-5">
+              <Link to="/users/me/update" id="edit_profile" className="btn btn-primary btn-block my-5">
                 Edit Profile
               </Link>
               <h4>Full Name:</h4>
