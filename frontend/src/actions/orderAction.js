@@ -89,7 +89,7 @@ export const getOrderDetails = (orderId) => {
   };
 };
 
-export const clearErros = () => {
+export const clearErrors = () => {
   return async function (dispatch) {
     dispatch({ type: CLEAR_ERRORS });
   };

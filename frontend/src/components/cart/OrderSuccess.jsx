@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, Link } from "react-router-dom";
+import { createOrder } from "../../actions/orderAction";
 
 const OrderSuccess = () => {
+  const dispatch = useDispatch();
+  const location = useLocation(); // returns current location obj
+  const searchParams = new URLSearchParams(location.search);
+  const sessionId = searchParams.get("session_id");
+
+  useEffect(() => {
+    dispatch(createOrder(sessionId));
+  }, [dispatch, sessionId]);
+
+
   return (
     <>
       <div className="row justify-content-center">
@@ -25,8 +38,7 @@ const OrderSuccess = () => {
           </svg>
 
           <h2>Your Order has been placed successfully.</h2>
-
-          <a>Go to Orders</a>
+          <Link to="/eats/orders/me/myOrders">Go to Orders</Link>
         </div>
       </div>
     </>
