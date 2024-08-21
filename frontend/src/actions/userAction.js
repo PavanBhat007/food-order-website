@@ -25,6 +25,7 @@ import {
   NEW_PASSWORD_SUCCESS,
   NEW_PASSWORD_FAIL,
 } from "../constants/userConstant";
+import { CLEAR_CART } from "../constants/cartConstant";
 
 export const login = (email, password) => {
   return async function (dispatch) {
@@ -109,6 +110,7 @@ export const logout = () => {
     try {
       await axios.get("/api/v1/users/logout");
       dispatch({ type: LOGOUT_SUCCESS });
+      dispatch({ type: CLEAR_CART }); // clear cart upon logout
     } catch (error) {
       dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
     }

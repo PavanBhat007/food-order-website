@@ -16,6 +16,7 @@ import {
   forgotPasswordReducer,
   userReducer,
 } from "./reducers/userReducer";
+import { cartReducer } from "./reducers/cartReducer";
 
 const reducer = combineReducers({
   restaurants: restaurantReducer,
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   forgotPassword: forgotPasswordReducer,
+  cart: cartReducer,
 });
 
 // to use redux devtools browser extension

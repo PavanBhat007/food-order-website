@@ -9,7 +9,8 @@ export default function Header() {
     const alert = useAlert();
     const dispatch = useDispatch();
 
-    const { user, loading } = useSelector(state => state.auth);
+    const { user, loading } = useSelector((state) => state.auth);
+    const { cartItems } = useSelector((state) => state.cart);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -19,21 +20,23 @@ export default function Header() {
     return (
         <nav className="navbar row sticky-top">
             {/* Logo */}
-            <div className="col-12 col-md-2">
+            <div className="col-12 col-md-3">
                 <Link to="/">
                     <img src="./images/logo.webp" alt="logo" className="logo" />
                 </Link>
             </div>
 
             {/* Search bar */}
-            <div className="col-12 col-md-8 mt-2 mt-md-6">
+            <div className="col-12 col-md-6 mt-2 mt-md-6">
                 <Search />
             </div>
 
-            <div className="col-12 col-md-2 mt-4 mt-md-0">
+            <div className="col-12 col-md-3 mt-4 mt-md-0">
                 {/* Cart */}
-                <span className="ml-3" id="cart">Cart</span>
-                <span className="ml-1" id="cart_count">0</span>
+                <Link to="/cart" style={{textDecoration: "none"}}>
+                    <span className="ml-3" id="cart">Cart</span>
+                    <span className="ml-1" id="cart_count">{cartItems.length}</span>
+                </Link>
             
                 {/* Login / Account */}
                 { user ? (

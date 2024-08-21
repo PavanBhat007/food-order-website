@@ -39,7 +39,7 @@ export const addItemToCart = (itemId, restaurant, quantity, alert) => {
 };
 
 export const updateCartQuantity = (itemId, quantity, alert) => {
-  return async function (dispatch) {
+  return async function (dispatch, getState) {
     try {
       const { user } = getState().auth;
       if (typeof itemId === "object") itemId = itemId._id;
@@ -57,7 +57,7 @@ export const updateCartQuantity = (itemId, quantity, alert) => {
   };
 };
 
-export const removeItemFromCart = (itemId) => {
+export const removeItemFromCart = (itemId, alert) => {
   return async function (dispatch, getState) {
     try {
       const { user } = getState().auth;
