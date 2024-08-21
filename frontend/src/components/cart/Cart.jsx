@@ -7,6 +7,7 @@ import {
   updateCartQuantity,
 } from "../../actions/cartAction";
 import { useAlert } from "react-alert";
+import { payment } from "../../actions/orderAction";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,10 @@ const Cart = () => {
       const newQty = quantity - 1;
       dispatch(updateCartQuantity(id, newQty, alert));
     } else alert.error("No items to delete!");
+  };
+
+  const handleCheckout = () => {
+    dispatch(payment(cartItems, restaurant));
   };
 
   return (
@@ -136,7 +141,11 @@ const Cart = () => {
                   </span>
                 </p>
                 <hr />
-                <button id="checkout_btn" className="btn btn-primary btn-block">
+                <button
+                  id="checkout_btn"
+                  className="btn btn-primary btn-block"
+                  onClick={handleCheckout}
+                >
                   Check Out
                 </button>
               </div>

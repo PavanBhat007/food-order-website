@@ -17,6 +17,11 @@ import {
   userReducer,
 } from "./reducers/userReducer";
 import { cartReducer } from "./reducers/cartReducer";
+import {
+  myOrderReducer,
+  newOrderReducer,
+  orderDetailsReducer,
+} from "./reducers/orderReducer";
 
 const reducer = combineReducers({
   restaurants: restaurantReducer,
@@ -25,6 +30,9 @@ const reducer = combineReducers({
   user: userReducer,
   forgotPassword: forgotPasswordReducer,
   cart: cartReducer,
+  newOrder: newOrderReducer,
+  myOrders: myOrderReducer,
+  orderDetails: orderDetailsReducer,
 });
 
 // to use redux devtools browser extension
