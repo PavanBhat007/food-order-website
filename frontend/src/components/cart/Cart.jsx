@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useAlert } from "react-alert";
 import { LiaRupeeSignSolid } from "react-icons/lia";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,7 +7,6 @@ import {
   removeItemFromCart,
   updateCartQuantity,
 } from "../../actions/cartAction";
-import { useAlert } from "react-alert";
 import { payment } from "../../actions/orderAction";
 
 const Cart = () => {
@@ -19,24 +19,28 @@ const Cart = () => {
     dispatch(fetchCartItems(alert));
   }, [dispatch, alert]);
 
-  const handleRemoveCartItem = (id) => {
+  const removeCartItemHandler = (id) => {
     dispatch(removeItemFromCart(id, alert));
   };
 
   const increaseQty = (id, quantity, stock) => {
     const newQty = quantity + 1;
-    if (newQty > stock) alert.error("Out of Stock!");
-    else dispatch(updateCartQuantity(id, newQty, alert));
+    if (newQty > stock) {
+      alert.error("Exceeded stock limit");
+    }
+    dispatch(updateCartQuantity(id, newQty, alert));
   };
 
   const decreaseQty = (id, quantity) => {
     if (quantity > 1) {
       const newQty = quantity - 1;
       dispatch(updateCartQuantity(id, newQty, alert));
-    } else alert.error("No items to delete!");
+    } else {
+      alert.error("Minimum Quantity reached");
+    }
   };
 
-  const handleCheckout = () => {
+  const checkoutHandler = () => {
     dispatch(payment(cartItems, restaurant));
   };
 
@@ -79,7 +83,9 @@ const Cart = () => {
                       <div className="stockCounter d-inline">
                         <span
                           className="btn btn-danger minus"
-                          onClick={decreaseQty(item.foodItem, item.quantity)}
+                          onClick={() =>
+                            decreaseQty(item.foodItem, item.quantity)
+                          }
                         >
                           -
                         </span>
@@ -91,11 +97,13 @@ const Cart = () => {
                         />
                         <span
                           className="btn btn-primary plus"
-                          onClick={increaseQty(
-                            item.foodItem,
-                            item.quantity,
-                            item.stock
-                          )}
+                          onClick={() =>
+                            increaseQty(
+                              item.foodItem,
+                              item.quantity,
+                              item.stock
+                            )
+                          }
                         >
                           +
                         </span>
@@ -105,7 +113,7 @@ const Cart = () => {
                       <i
                         id="delete_cart_item"
                         className="fa fa-trash btn btn-danger"
-                        onClick={() => handleRemoveCartItem(item.foodItem)}
+                        onClick={() => removeCartItemHandler(item.foodItem)}
                       ></i>
                     </div>
                   </div>
@@ -144,7 +152,7 @@ const Cart = () => {
                 <button
                   id="checkout_btn"
                   className="btn btn-primary btn-block"
-                  onClick={handleCheckout}
+                  onClick={checkoutHandler}
                 >
                   Check Out
                 </button>

@@ -1,30 +1,35 @@
 import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useLocation, Link } from "react-router-dom";
 import { createOrder } from "../../actions/orderAction";
 
 const OrderSuccess = () => {
-  const dispatch = useDispatch();
-  const location = useLocation(); // returns current location obj
+  const location = useLocation();
+
+  //https://example.com/page?name=JohnDoe&age=25
+
   const searchParams = new URLSearchParams(location.search);
-  const sessionId = searchParams.get("session_id");
+  // {pathName: https://example.com,
+  //   name: "JhonDoe",
+  // age: 25}
+  const session_id = searchParams.get("session_id");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(createOrder(sessionId));
-  }, [dispatch, sessionId]);
-
+    dispatch(createOrder(session_id));
+  }, [dispatch, session_id]);
 
   return (
     <>
       <div className="row justify-content-center">
         <div className="col-6 mt-5 text-center">
           <svg
-            class="checkmark"
+            className="checkmark"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 52 52"
           >
             <circle
-              class="checkmark__circle"
+              className="checkmark__circle"
               cx="26"
               cy="26"
               r="25"
@@ -38,6 +43,7 @@ const OrderSuccess = () => {
           </svg>
 
           <h2>Your Order has been placed successfully.</h2>
+
           <Link to="/eats/orders/me/myOrders">Go to Orders</Link>
         </div>
       </div>

@@ -1,41 +1,42 @@
 import {
-  ADD_TO_CART,
-  CLEAR_CART,
-  FETCH_CART,
-  REMOVE_ITEM_CART,
   UPDATE_ITEM_CART,
+  REMOVE_ITEM_CART,
+  FETCH_CART,
+  CLEAR_CART,
+  ADD_TO_CART,
 } from "../constants/cartConstant";
 
-const initialState = {
-  cartItems: [],
-  restaurant: [],
-};
-
-export const cartReducer = (state = initialState, action) => {
+export const cartReducer = (
+  state = { cartItems: [], restaurant: {} },
+  action
+) => {
   switch (action.type) {
     case ADD_TO_CART:
       return {
         ...state,
         restaurant: action.payload.restaurant,
-        cartItems: action.payload.cart.items,
+        cartItems: action.payload.items,
       };
 
     case UPDATE_ITEM_CART:
       return {
         ...state,
-        cartItems: action.payload.cart.items,
+        cartItems: action.payload.items,
       };
 
     case FETCH_CART:
       return {
         ...state,
         restaurant: action.payload.restaurant,
-        cartItems: action.payload.cart.items,
+        cartItems: action.payload.items,
       };
 
     case REMOVE_ITEM_CART:
       if (action.payload.cart === undefined) {
-        return { ...state, cartItems: [] };
+        return {
+          ...state,
+          cartItems: [],
+        };
       } else {
         return {
           ...state,
