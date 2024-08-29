@@ -6,70 +6,88 @@ import {
   UPDATE_ITEM_CART,
 } from "../constants/cartConstant";
 
-export const fetchCartItems = (alert) => {
-  return async function (dispatch) {
-    try {
-      const res = await axios.get("/api/v1/eats/cart/get-cart");
-      dispatch({ type: FETCH_CART, payload: res.data.data });
-    } catch (error) {
-      alert.error(`Fetch Cart error: ${error}`);
-      if (alert) alert.info("Cart is hungry!");
+export const fetchCartItems = (alert) => async (dispatch) => {
+  try {
+    const response = await axios.get("/api/v1/eats/cart/get-cart");
+    dispatch({
+      type: FETCH_CART,
+      payload: response.data.data,
+    });
+  } catch (error) {
+    console.error("Fetch cart error: ", error);
+    if (alert) {
+      alert.info("Cart is hungry");
     }
-  };
+  }
 };
 
-export const addItemToCart = (itemId, restaurant, quantity, alert) => {
-  return async function (dispatch, getState) {
+// Add to Cart
+export const addItemToCart =
+  (foodItemId, restaurant, quantity, alert) => async (dispatch, getState) => {
     try {
-      // getState() returns current state / store
-      const { user } = getState().auth;
-      const res = await axios.post("/api/v1/eats/cart/add-to-cart", {
+      const { user } = getState().auth; // return the currnt store tree
+      const response = await axios.post("/api/v1/eats/cart/add-to-cart", {
         userId: user._id,
-        foodItemId: itemId,
-        restuarantId: restaurant,
+        foodItemId,
+        restaurantId: restaurant,
+        quantity,
+      });
+      alert.success("Item added to cart", response.data.cart);
+      dispatch({
+        type: ADD_TO_CART,
+        payload: response.data.cart,
+      });
+    } catch (error) {
+      alert.error(error.response ? error.response.data.message : error.message);
+    }
+  };
+
+//Update cart Item quantity
+export const updateCartQuantity =
+  (foodItemId, quantity, alert) => async (dispatch, getState) => {
+    try {
+      const { user } = getState().auth;
+
+      if (typeof foodItemId === "object") {
+        foodItemId = foodItemId._id;
+      }
+
+      const response = await axios.post("/api/v1/eats/cart/update-cart-item", {
+        userId: user._id,
+        foodItemId: foodItemId,
         quantity,
       });
 
-      alert.success("Food item added to cart", res.data.cart);
-      dispatch({ type: ADD_TO_CART, payload: res.data.cart });
+      dispatch({
+        type: UPDATE_ITEM_CART,
+        payload: response.data.cart,
+      });
     } catch (error) {
-      alert.error(error.res ? error.res.data.message : error.message);
+      alert.error(error.response ? error.response.data.message : error.message);
     }
   };
-};
 
-export const updateCartQuantity = (itemId, quantity, alert) => {
-  return async function (dispatch, getState) {
+// Remove items from cart
+export const removeItemFromCart =
+  (foodItemId) => async (dispatch, getState) => {
     try {
       const { user } = getState().auth;
-      if (typeof itemId === "object") itemId = itemId._id;
 
-      const res = await axios.put("/api/v1/eats/cart/update-cart-item", {
-        userId: user._id,
-        foodItemId: itemId,
-        quantity,
+      if (typeof foodItemId === "object") {
+        foodItemId = foodItemId._id;
+      }
+
+      const response = await axios.delete(
+        "/api/v1/eats/cart/delete-cart-item",
+        {
+          data: { userId: user._id, foodItemId },
+        }
+      );
+      dispatch({
+        type: REMOVE_ITEM_CART,
+        payload: response.data,
       });
-
-      dispatch({ type: UPDATE_ITEM_CART, payload: res.data.cart });
     } catch (error) {
-      alert.error(error.res ? error.res.data.message : error.message);
+      alert.error(error.response ? error.response.data.message : error.message);
     }
   };
-};
-
-export const removeItemFromCart = (itemId, alert) => {
-  return async function (dispatch, getState) {
-    try {
-      const { user } = getState().auth;
-      if (typeof itemId === "object") itemId = itemId._id;
-
-      const res = await axios.delete("/api/v1/eats/cart/delete-cart-item", {
-        data: { userId: user._id, foodItemId: itemId },
-      });
-
-      dispatch({ type: REMOVE_ITEM_CART, payload: res.data });
-    } catch (error) {
-      alert.error(error.res ? error.res.data.message : error.message);
-    }
-  };
-};
